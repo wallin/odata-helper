@@ -1,5 +1,6 @@
 //
 // Simple OData query string builder
+// https://github.com/wallin/odata-helper
 //
 
 (function (window) {
