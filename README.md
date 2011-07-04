@@ -37,5 +37,5 @@ gives:
 ## Change service URL and format
 Changes to URL and format will automatically apply to all resources created on the service.
 
-   svc.setUrl('http://myurl.com');
-   svc.setFormat();
+    svc.setUrl('http://myurl.com');
+    svc.setFormat();
