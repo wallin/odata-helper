@@ -23,7 +23,7 @@ A query is performed on a resource by chaining query methods and finally call
 
 will result in a string:
 
-    http://example.com/Products/?$select=Name,Price&$orderby=Price desc&$format=json
+    http://example.com/Products?$select=Name,Price&$orderby=Price desc&$format=json
 
 or
 
@@ -31,7 +31,7 @@ or
 
 gives:
 
-    http://example.com/Products(23)/Colors/?$filter=Name eq 'red'&$format=json
+    http://example.com/Products(23)/Colors?$filter=Name eq 'red'&$format=json
 
 
 ## Change service URL and format
