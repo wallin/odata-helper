@@ -57,7 +57,7 @@
   };
 
   // Generate prototype functions as specified in queryParams
-  var odataQueryFuncs = function () {};
+  var odataQueryFuncs = {};
   for (var j in queryParams) {
     if (queryParams.hasOwnProperty(j)) {
       var fn = queryParams[j];
@@ -65,16 +65,33 @@
     }
   }
 
+  // Append a regular parameter. First parameter can be an object instead
+  odataQueryFuncs.param = function (name, value) {
+    if (typeof name === 'string') {
+      var obj = {};
+      obj[name] = value;
+      name = obj;
+    }
+    for (var i in name) {
+      if (name.hasOwnProperty(i)) {
+        this._params[i] = name[i];
+      }
+    }
+    return this;
+  };
+
   // Generates URL-string from odataService object
   var toString = function () {
     var segments = [this._root];
     var qry = [];
     if (this._params) {
       for (var i in this._params) {
-        if (this._params.hasOwnProperty(i) &&
-            (i in queryParams)) {
-          var item = this._params[i];
-          qry.push('$' + i + '=' + item);
+        if (this._params.hasOwnProperty(i)) {
+          var item = i + '=' + this._params[i];
+          if (i in queryParams) {
+            item = '$' + item;
+          }
+          qry.push(item);
         }
       }
       if (this._format) {
@@ -94,10 +111,8 @@
       segments = segments.concat(this._resource);
       this._resource = [];
     }
-    if (qry.length > 0) {
-      segments.push('?' + qry.join('&'));
-    }
-    return segments.join('/');
+    qry = qry.length > 0 ? '?' + qry.join('&') : '';
+    return segments.join('/') + qry;
   };
 
 
@@ -125,9 +140,8 @@
       toString: toString
     };
 
-    for (var i in queryParams) {
-      if (queryParams.hasOwnProperty(i)) {
-        var item = queryParams[i];
+    for (var i in odataQueryFuncs) {
+      if (odataQueryFuncs.hasOwnProperty(i)) {
         proto[i] = odataQueryFuncs[i];
       }
     }
