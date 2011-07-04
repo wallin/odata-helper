@@ -18,15 +18,19 @@ Create a resource based on the service
 ## Generate query URL
 A query is performed on a resource by chaining query methods and finally call
 `toString`. `toString` will also reset the current query.
+
     var url = res.select('Name', 'Price').orderby('Price').desc().toString();
 
 will result in a string:
+
     http://example.com/Products/?$select=Name,Price&$orderby=Price desc&$format=json
 
 or
+
     var url = res.id(23).path('Colors').filter('Name eq ' + odata.string('red')).toString();
 
 gives:
+
     http://example.com/Products(23)/Colors/?$filter=Name eq 'red'&$format=json
 
 
