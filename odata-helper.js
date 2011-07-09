@@ -17,6 +17,7 @@
   var paramMulti = function (name) {
     return function () {
       var str = '';
+      
       for (var i = 0, len = arguments.length; i < len; i++) {
         if (i !== 0) {
           str += ',';
@@ -94,10 +95,10 @@
           qry.push(item);
         }
       }
-      if (this._format) {
-        qry.push('$format=' + this._format);
-      }
       this._params = {};
+    }
+    if (this._format) {
+      qry.push('$format=' + this._format);
     }
     if (this._default) {
       var def = this._default;
