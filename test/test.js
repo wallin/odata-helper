@@ -24,6 +24,7 @@ test('service: set format, change url', function () {
   equals(svc.toString(), url2, 'can set new URL and set format');
 });
 
+module('Resource functions');
 test('resource: create', function () {
   var svc = odata.service(url);
   var r = svc.resource(res);
@@ -51,4 +52,15 @@ test('resource: change id function', function () {
   equals(r.id(1).toString(), url + '/' + res + '/1/', 'can modify id on resource by function');
 
   odata.options.idFunc = old;
+});
+
+test('resource: set custom suffix on resource', function () {
+  odata.options.resourceSuffix = '.json';
+  var svc = odata.service(url);
+  var r = svc.resource(res);
+  equals(r.expand('expand').toString(), url + '/' + res + '.json?$expand=expand', 'can set custom suffix on resource');
+
+  equals(r.id(1).expand('expand').toString(), url + '/' + res + '(1).json?$expand=expand', 'can set custom suffix on resource with path');
+  equals(r.id(1).path('path').expand('expand').toString(), url + '/' + res + '(1)/path.json?$expand=expand', 'can set custom suffix on resource with path and id');
+  odata.options.resourceSuffix = false;
 });

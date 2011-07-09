@@ -86,6 +86,7 @@
   var toString = function () {
     var segments = [this._root];
     var qry = [];
+    var suffix = '';
     if (this._params) {
       for (var i in this._params) {
         if (this._params.hasOwnProperty(i)) {
@@ -113,8 +114,11 @@
       segments = segments.concat(this._resource);
       this._resource = [];
     }
+    if (odata.options.resourceSuffix) {
+      suffix = odata.options.resourceSuffix;
+    }
     qry = qry.length > 0 ? '?' + qry.join('&') : '';
-    return segments.join('/') + qry;
+    return segments.join('/') + suffix + qry;
   };
 
 
@@ -182,6 +186,7 @@
     service: odataService,
     options: {
       systemQueryPrefix: '$',
+      resourceSuffix: false,
       idFunc: function (str) {
         return '(' + str + ')';
       }
