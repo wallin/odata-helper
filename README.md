@@ -39,3 +39,20 @@ Changes to URL and format will automatically apply to all resources created on t
 
     svc.setUrl('http://myurl.com');
     svc.setFormat();
+
+## Options
+
+The library provides options to configure a suffix to add to the resource path aswell as a function for generating an id for the resource. Eg. if you want a more Rails-like URL scheme:
+
+    odata.options.idFunc = function (id) {
+      return '/' + id;
+    };
+    odata.options.resourceSuffix = '.json';
+
+Will make the following call
+
+    res.id(23).path('Colors').param('page', 1).toString();
+
+generate an URL of the form:
+
+    http://example.com/Products/1/Colors.json?page=1

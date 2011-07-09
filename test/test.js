@@ -77,6 +77,8 @@ test('resource: set custom suffix and custom id function', function () {
 
   equals(r.id(1).path('path').toString(), url + '/' + res + '/1/path.json', 'can set custom suffix and id on resource with path');
 
+  equals(r.id(1).path('path').param('page', 1).toString(), url + '/' + res + '/1/path.json?page=1', 'can set custom suffix and id with parameters on resource with path');
+
   odata.options.idFunc = old;
   odata.options.resourceSuffix = false;
 });
