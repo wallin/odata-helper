@@ -45,11 +45,11 @@ test('resource: system functions', function () {
 test('resource: change id function', function () {
   var old = odata.options.idFunc;
   odata.options.idFunc = function (str) {
-    return '/' + str + '/';
+    return '/' + str;
   };
   var svc = odata.service(url);
   var r = svc.resource(res);
-  equals(r.id(1).toString(), url + '/' + res + '/1/', 'can modify id on resource by function');
+  equals(r.id(1).toString(), url + '/' + res + '/1', 'can modify id on resource by function');
 
   odata.options.idFunc = old;
 });
@@ -60,7 +60,23 @@ test('resource: set custom suffix on resource', function () {
   var r = svc.resource(res);
   equals(r.expand('expand').toString(), url + '/' + res + '.json?$expand=expand', 'can set custom suffix on resource');
 
-  equals(r.id(1).expand('expand').toString(), url + '/' + res + '(1).json?$expand=expand', 'can set custom suffix on resource with path');
+  equals(r.id(1).expand('expand').toString(), url + '/' + res + '(1).json?$expand=expand', 'can set custom suffix on resource with id');
   equals(r.id(1).path('path').expand('expand').toString(), url + '/' + res + '(1)/path.json?$expand=expand', 'can set custom suffix on resource with path and id');
+  odata.options.resourceSuffix = false;
+});
+
+test('resource: set custom suffix and custom id function', function () {
+  var old = odata.options.idFunc;
+  odata.options.resourceSuffix = '.json';
+  odata.options.idFunc = function (str) {
+    return '/' + str;
+  };
+  var svc = odata.service(url);
+  var r = svc.resource(res);
+  equals(r.id(1).toString(), url + '/' + res + '/1.json', 'can set custom suffix and id on resource');
+
+  equals(r.id(1).path('path').toString(), url + '/' + res + '/1/path.json', 'can set custom suffix and id on resource with path');
+
+  odata.options.idFunc = old;
   odata.options.resourceSuffix = false;
 });
