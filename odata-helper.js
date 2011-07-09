@@ -4,6 +4,7 @@
 //
 
 (function (window) {
+  var odata;
   // Builderfunctions for different types
   var paramSingle = function (name) {
     return function (val) {
@@ -17,7 +18,7 @@
   var paramMulti = function (name) {
     return function () {
       var str = '';
-      
+
       for (var i = 0, len = arguments.length; i < len; i++) {
         if (i !== 0) {
           str += ',';
@@ -98,12 +99,12 @@
       this._params = {};
     }
     if (this._format) {
-      qry.push('$format=' + this._format);
+      qry.push(odata.options.systemQueryPrefix + 'format=' + this._format);
     }
     if (this._default) {
       var def = this._default;
       if (this._id) {
-        def += '(' + this._id + ')';
+        def += odata.options.idFunc(this._id);
         this._id = null;
       }
       segments.push(def);
@@ -127,7 +128,7 @@
 
   var addResource = function (resource, id) {
     if (id || id === 0) {
-      resource += '(' + id + ')';
+      resource += odata.options.idFunc(id);
     }
     this._resource.push(resource);
     return this;
@@ -171,13 +172,21 @@
     return new F();
   };
 
-  window.odata = {
+  odata = {
     string: function (str) {
       return '\'' + str + '\'';
     },
     date: function (date) {
       return odata.string(date.toISOString());
     },
-    service: odataService
+    service: odataService,
+    options: {
+      systemQueryPrefix: '$',
+      idFunc: function (str) {
+        return '(' + str + ')';
+      }
+    }
   };
+
+  window.odata = odata;
 }(window));
